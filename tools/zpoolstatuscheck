@@ -1,0 +1,36 @@
+#! /usr/bin/sh
+
+ZED_ZEDLET_DIR='/etc/zfs/zed.d'
+statematch='DEGRADED|DESTROYED|EXPORTED|FAULTED|L2CACHE|POTENTIALLY_ACTIVE|REMOVED|SPARE|SPLIT|UNAVAIL|UNINITIALIZED|UNKNOWN'
+actionmatch='action:|status:'
+
+[ -f "${ZED_ZEDLET_DIR}/zed.rc" ] && . "${ZED_ZEDLET_DIR}/zed.rc"
+. "${ZED_ZEDLET_DIR}/zed-functions.sh"
+
+DEVSTATE=$(/usr/bin/zpool status | egrep --only-matching --max-count=1 "${statematch}")
+ACTNEED=$(/usr/bin/zpool status | egrep --only-matching --max-count=1 "${actionmatch}")
+
+if [ -z "${DEVSTATE}" -a -z "${ACTNEED}" ]; then
+    # no abnormalities
+    exit 0
+fi
+
+umask 077
+
+if [ "${DEVSTATE}" ]; then
+    note_subject="ZFS device with ${DEVSTATE} on $(hostname)"
+else
+    note_subject="Action required on ZFS device on $(hostname)"
+fi
+note_pathname="${TMPDIR:="/tmp"}/$(basename -- "$0").$$.${RANDOM}"
+{
+    echo -n "  time: "
+    /usr/bin/date --rfc-3339=seconds
+
+    /usr/bin/zpool status
+} > "${note_pathname}"
+
+zed_notify "${note_subject}" "${note_pathname}"; rv=$?
+
+rm -f "${note_pathname}"
+exit "${rv}"

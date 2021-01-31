@@ -1,0 +1,8 @@
+[Unit]
+Description=Check ZFS pool status
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+ExecStart=/opt/zfs/tools/zpoolstatuscheck
+IOSchedulingClass=idle
