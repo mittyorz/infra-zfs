@@ -1,0 +1,9 @@
+[Unit]
+Description=Boot time and daily check timer for ZFS pool status
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1d
+
+[Install]
+WantedBy=timers.target
