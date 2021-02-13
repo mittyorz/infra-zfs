@@ -27,7 +27,7 @@ note_pathname="${TMPDIR:="/tmp"}/$(basename -- "$0").$$.${RANDOM}"
     echo -n "  time: "
     /usr/bin/date --rfc-3339=seconds
 
-    /usr/bin/zpool status
+    /usr/bin/zpool status -Pv
 } > "${note_pathname}"
 
 zed_notify "${note_subject}" "${note_pathname}"; rv=$?
