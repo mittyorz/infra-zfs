@@ -18,9 +18,9 @@ fi
 umask 077
 
 if [ "${DEVSTATE}" ]; then
-    note_subject="ZFS device with ${DEVSTATE} on $(hostname)"
+    note_subject="ZFS device with ${DEVSTATE} on $(/usr/bin/cat /etc/hostname)"
 else
-    note_subject="Action required on ZFS device on $(hostname)"
+    note_subject="Action required on ZFS device on $(/usr/bin/cat /etc/hostname)"
 fi
 note_pathname="${TMPDIR:="/tmp"}/$(basename -- "$0").$$.${RANDOM}"
 {
