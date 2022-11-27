@@ -2,8 +2,8 @@
 Description=Monthly zpool scrub on %i
 
 [Timer]
-OnCalendar=Sat *-*-1..7 02:00:00
-OnCalendar=Sat *-*-15..21 02:00:00
+OnCalendar=Sat *-*-8..14 02:00:00
+OnCalendar=Sat *-*-22..28 02:00:00
 
 [Install]
 WantedBy=timers.target
